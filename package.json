@@ -1,0 +1,24 @@
+{
+  "name": "apsanatorium-receipt-tally-converter",
+  "version": "1.0.0",
+  "description": "Convert data to tally compatible format for receipt entry",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "npm run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mustafa-kapadia1483/apsanatorium-receipt-tally-converter.git"
+  },
+  "author": "Mustafa Kapadia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mustafa-kapadia1483/apsanatorium-receipt-tally-converter/issues"
+  },
+  "homepage": "https://github.com/mustafa-kapadia1483/apsanatorium-receipt-tally-converter#readme",
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "xlsx": "^0.18.5"
+  }
+}
