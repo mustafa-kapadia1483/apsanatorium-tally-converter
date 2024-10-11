@@ -1,5 +1,5 @@
 /**
- * Function to convert raw receipt data to voucher data
+ * Function to convert raw receipt data to voucher data which can be imported in Tally Primme
  * @param {Array} receiptDataArray
  * @returns {Array}
  */

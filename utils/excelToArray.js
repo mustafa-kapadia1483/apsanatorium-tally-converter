@@ -33,7 +33,7 @@ export default function excelToArray(filePath) {
     return rowData;
   });
 
-  result.pop();
+  result.pop(); // Last row has total value which is not needed to create tally data
 
   return result.filter(
     data => !data["Rec Type"].toLowerCase().includes("refund")
