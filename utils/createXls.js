@@ -10,9 +10,7 @@ XLSX.set_fs(fs);
  * @param {string} fileName - Filename with which Excel Workbook will be saved
  */
 export default function createXls(xlsDataArray, sheetName, fileName) {
-  const tallyImportWorksheet = XLSX.utils.json_to_sheet(xlsDataArray, {
-    dateNF: "yy/mm/dd",
-  });
+  const tallyImportWorksheet = XLSX.utils.json_to_sheet(xlsDataArray);
 
   const tallyImportWorkbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(
