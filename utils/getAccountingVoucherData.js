@@ -1,10 +1,21 @@
 /**
+ * Accounting vouher data and ledger data
+ * @typedef {Object} AccountingData
+ * @property {Array} tallyAccountingVoucherArray - Accouting vouchers
+ * @property {Array} ledgerArray - Ledgers needer for accouting vouchers
+ */
+
+import strftime from "./strftime.js";
+
+/**
  * Function to convert raw receipt data to voucher data which can be imported in Tally Primme
  * @param {Array} receiptDataArray
- * @returns {Array}
+ * @returns {AccountingData}
+ *
  */
 export default function getAccountingVoucherData(receiptDataArray) {
-  let result = [];
+  let tallyAccountingVoucherArray = [];
+  let ledgerArray = [];
   for (let entry of receiptDataArray) {
     const VOUCHER_TYPE_NAME = "Receipt";
     const BILL_TYPE_OF_REF = "New Ref";
@@ -17,9 +28,12 @@ export default function getAccountingVoucherData(receiptDataArray) {
     let voucherNumber = entry["Rec No."];
     let amount = entry["Amt-In"];
 
+    let voucherDate = strftime("%d-%b-%Y", new Date(date));
     let bankAllocationsTransferMode = null;
     let bankAllocationsTransferType = null;
     let debitLedgerName = null;
+
+    let ledgerName = `${bookingId} ${guestName}`.trim();
 
     if (typeof payType != "string" || payType.length == 0) {
       payType = "NEFT"; // Qusai: pass it as NEFT if blank or undefined
@@ -36,10 +50,10 @@ export default function getAccountingVoucherData(receiptDataArray) {
     }
 
     let creditObject = {
-      "Voucher Date": date,
+      "Voucher Date": voucherDate,
       "Voucher Type Name": VOUCHER_TYPE_NAME,
       "Voucher Number": voucherNumber,
-      "Ledger Name": `${bookingId} ${guestName}`,
+      "Ledger Name": ledgerName,
       "Ledger Amount": amount,
       "Ledger Amount Dr/Cr": "Cr",
       "Bank Allocations - Transaction Type": "",
@@ -53,7 +67,7 @@ export default function getAccountingVoucherData(receiptDataArray) {
     };
 
     let debitObject = {
-      "Voucher Date": date,
+      "Voucher Date": voucherDate,
       "Voucher Type Name": VOUCHER_TYPE_NAME,
       "Voucher Number": voucherNumber,
       "Ledger Name": debitLedgerName,
@@ -69,7 +83,18 @@ export default function getAccountingVoucherData(receiptDataArray) {
         STAT_ADJUSTMENT_GST__NATURE_OF_ADJUSTMENT,
     };
 
-    result.push(creditObject, debitObject);
+    tallyAccountingVoucherArray.push(creditObject, debitObject);
+
+    let ledgerObject = {
+      Name: ledgerName,
+      "Group Name": "Sundry Debtors",
+      "Mailing Name": ledgerName,
+      "GST Registration Type": "Unregistered/Consumer",
+      State: "Maharashtra",
+      Country: "India",
+    };
+
+    ledgerArray.push(ledgerObject);
   }
-  return result;
+  return { tallyAccountingVoucherArray, ledgerArray };
 }
