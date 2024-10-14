@@ -1,6 +1,35 @@
 import { getTallyFormattedDate } from "./date-utils.js";
 
 /**
+ * Function to calculate numbers such that it's rounded to 2 numbers and adition is always equal to total
+ * @param {number} total
+ * @param {number} num1
+ * @param {number} num2
+ * @param {number} num3
+ * @returns {Array}
+ */
+function calculateNumbers(total, num1, num2, num3) {
+  // Round the numbers to 2 decimal places
+  num1 = parseFloat(num1.toFixed(2));
+  num2 = parseFloat(num2.toFixed(2));
+  num3 = parseFloat(num3.toFixed(2));
+
+  // Calculate the sum of rounded numbers
+  let roundedSum = num1 + num2 + num3;
+
+  // Adjust the last number to ensure the total is exactly 30
+  let difference = total - roundedSum;
+  num3 += difference;
+
+  // Round again after adjustment to ensure precision
+  num3 = parseFloat(num3.toFixed(2));
+
+  return [num1, num2, num3];
+}
+
+// console.log(calculateNumbers(30)); // [26.79, 1.61, 1.60]
+
+/**
  *
  * @param {Array} salesDataArray - Array containing sales raw data json
  * @returns {Array}
@@ -62,20 +91,27 @@ export default function getAccoutingVoucherSalesData(salesDataArray) {
       const additionalRoomServiceIncomeGst =
         (additionalCharge - additionalRoomServiceIncomeLedgerAmount) / 2;
 
+      const charges = calculateNumbers(
+        additionalCharge,
+        additionalRoomServiceIncomeLedgerAmount,
+        additionalRoomServiceIncomeGst,
+        additionalRoomServiceIncomeGst
+      );
+
       const additionalRoomServiceIncome = {
         ...occupanyRoomRentIncome,
         "Ledger Name": "02. Additional Room Service Income",
-        "Ledger Amount": additionalRoomServiceIncomeLedgerAmount,
+        "Ledger Amount": charges[0],
       };
 
       const additionalRoomServiceIncomeCGST = {
         ...occupanyRoomRentIncomeSalesCGST,
-        "Ledger Amount": additionalRoomServiceIncomeGst,
+        "Ledger Amount": charges[1],
       };
 
       const additionalRoomServiceIncomeSGST = {
         ...occupanyRoomRentIncomeSalesSGST,
-        "Ledger Amount": additionalRoomServiceIncomeGst,
+        "Ledger Amount": charges[2],
       };
 
       accoutingVoucherSalesArray.push(
