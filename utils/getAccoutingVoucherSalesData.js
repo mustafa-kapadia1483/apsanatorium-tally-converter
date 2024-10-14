@@ -58,12 +58,9 @@ export default function getAccoutingVoucherSalesData(salesDataArray) {
     );
 
     if (additionalCharge > 0) {
-      const additionalRoomServiceIncomeLedgerAmount = (
-        additionalCharge / 1.12
-      ).toFixed(3);
-      const additionalRoomServiceIncomeGst = (
-        parseFloat(additionalRoomServiceIncomeLedgerAmount) * 0.06
-      ).toFixed(3);
+      const additionalRoomServiceIncomeLedgerAmount = additionalCharge / 1.12;
+      const additionalRoomServiceIncomeGst =
+        (additionalCharge - additionalRoomServiceIncomeLedgerAmount) / 2;
 
       const additionalRoomServiceIncome = {
         ...occupanyRoomRentIncome,
