@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "npm run"
+    "r": "node . \"receipt\"",
+    "s": "node . \"sales\""
   },
   "repository": {
     "type": "git",

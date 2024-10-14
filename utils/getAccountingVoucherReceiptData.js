@@ -5,7 +5,7 @@
  * @property {Array} ledgerArray - Ledgers needer for accouting vouchers
  */
 
-import strftime from "./strftime.js";
+import { getTallyFormattedDate } from "./date-utils.js";
 
 /**
  * Function to convert raw receipt data to voucher data which can be imported in Tally Primme
@@ -13,7 +13,7 @@ import strftime from "./strftime.js";
  * @returns {AccountingData}
  *
  */
-export default function getAccountingVoucherData(receiptDataArray) {
+export default function getAccountingVoucherReceiptData(receiptDataArray) {
   let tallyAccountingVoucherArray = [];
   let ledgerArray = [];
   for (let entry of receiptDataArray) {
@@ -28,7 +28,7 @@ export default function getAccountingVoucherData(receiptDataArray) {
     let voucherNumber = entry["Rec No."];
     let amount = entry["Amt-In"];
 
-    let voucherDate = strftime("%d-%b-%Y", new Date(date));
+    let voucherDate = getTallyFormattedDate(new Date(date));
     let bankAllocationsTransferMode = null;
     let bankAllocationsTransferType = null;
     let debitLedgerName = null;

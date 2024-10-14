@@ -4,7 +4,7 @@
  * @param {Date|null} date - Date object for which formatted string will be returned
  * @returns {string}
  */
-export default function strftime(sFormat, date = null) {
+export function strftime(sFormat, date = null) {
   if (typeof sFormat !== "string") {
     return "";
   }
@@ -111,4 +111,13 @@ export default function strftime(sFormat, date = null) {
       }[sMatch] || "") + "" || sMatch
     );
   });
+}
+
+/**
+ * Returns date in string formatted for tally
+ * @param {Date} dateObject - JS Date object
+ * @returns {string}
+ */
+export function getTallyFormattedDate(dateObject = null) {
+  return strftime("%d-%b-%Y", dateObject);
 }
