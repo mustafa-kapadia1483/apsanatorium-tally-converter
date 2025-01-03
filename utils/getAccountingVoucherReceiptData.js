@@ -46,7 +46,7 @@ export default function getAccountingVoucherReceiptData(receiptDataArray) {
     } else if (payType.toLowerCase().includes("credit")) {
       // For credit card  debit ledger name is different
       bankAllocationsTransferMode = payType;
-      bankAllocationsTransferType = "e-Fund Transfer";
+      bankAllocationsTransferType = "card";
       debitLedgerName = "Axis Bank 924020058901303";
     } else {
       bankAllocationsTransferMode = payType;
