@@ -5,7 +5,7 @@ Simple tool to convert raw receipt, sales data to tally importable data for apsa
 3. Extract the files once download is complete
 4. Double click on run.bat
 
-Deprecated
+⚠️ Deprecated ⚠️  
 Steps to use this tool using command prompt
 
 1. Make sure to have node installed, if not present download from [here](https://nodejs.org/en)
