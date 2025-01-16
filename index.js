@@ -18,7 +18,11 @@ const { Select, Toggle } = pkg;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Helper function to scan for XLS files
+/**
+ * Helper function to scan for XLS files
+ * @param {string} directoryPath - Path of directory to scan
+ * @returns {Promise<Array>} - Array of XLS file names found in the directory
+ */
 async function findXlsFiles(directoryPath) {
   try {
     const files = await fs.readdir(directoryPath);
@@ -45,6 +49,10 @@ console.log(
   )
 );
 
+/**
+ * Print error message
+ * @param {Error} error - Error object
+ */
 async function handleError(error) {
   console.log(chalk.red("\n┌────────────────────────────────────────┐"));
   console.log(chalk.red("│              FATAL ERROR               │"));
@@ -130,6 +138,23 @@ async function main() {
       spinner.succeed(
         chalk.green("✨ Successfully created Accounting-Voucher-Sales.xlsx")
       );
+    }
+
+    // spinner.start(chalk.yellow(`\nDeleting ${filePath}...`));
+    const shouldDelete = await new Toggle({
+      message: `Delete ${filePath}?`,
+      enabled: "Yes",
+      disabled: "No",
+      initial: true,
+    }).run();
+
+    if (shouldDelete) {
+      spinner.start(chalk.yellow(`\nDeleting ${filePath}...`));
+      fs.unlink(filePath)
+        .then(() => spinner.succeed(chalk.green(`Deleted ${filePath}`)))
+        .catch(() => spinner.fail(chalk.red(`Failed to delete ${filePath}`)));
+    } else {
+      spinner.succeed(chalk.green(`Skipped deletion of ${filePath}`));
     }
 
     // Interactive exit prompt
