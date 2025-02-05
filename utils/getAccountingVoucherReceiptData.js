@@ -8,12 +8,20 @@
 import { getTallyFormattedDate } from "./date-utils.js";
 
 /**
+ * @typedef {"Axis Bank 924020058901303"|"HDFC - Cur A/c  03567620000018"} EFundTransferLedgerName
+ */
+
+/**
  * Function to convert raw receipt data to voucher data which can be imported in Tally Primme
  * @param {Array} receiptDataArray
+ * @param {EFundTransferLedgerName} eFundTransferDebitLedgerName
  * @returns {AccountingData}
  *
  */
-export default function getAccountingVoucherReceiptData(receiptDataArray) {
+export default function getAccountingVoucherReceiptData(
+  receiptDataArray,
+  eFundTransferDebitLedgerName
+) {
   let tallyAccountingVoucherArray = [];
   let ledgerArray = [];
   for (let entry of receiptDataArray) {
@@ -51,7 +59,7 @@ export default function getAccountingVoucherReceiptData(receiptDataArray) {
     } else {
       bankAllocationsTransferMode = payType;
       bankAllocationsTransferType = "e-Fund Transfer";
-      debitLedgerName = "HDFC - Cur A/c  03567620000018";
+      debitLedgerName = eFundTransferDebitLedgerName; // Qusai: To have this changeable via user input
     }
 
     let creditObject = {

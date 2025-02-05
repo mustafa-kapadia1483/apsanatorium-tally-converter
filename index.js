@@ -13,6 +13,7 @@ import excelToArray from "./utils/excelToArray.js";
 import getAccountingVoucherReceiptData from "./utils/getAccountingVoucherReceiptData.js";
 import createXls from "./utils/createXls.js";
 import getAccoutingVoucherSalesData from "./utils/getAccoutingVoucherSalesData.js";
+/** @import {EFundTransferLedgerName} from './utils/getAccountingVoucherReceiptData.js' */
 
 const { Select, Toggle } = pkg;
 const __filename = fileURLToPath(import.meta.url);
@@ -95,6 +96,20 @@ async function main() {
     const filePath = path.join(__dirname, selectedFile);
 
     if (convertFor.toLowerCase() === "receipt") {
+      // Select bank name for e fund transfer ledger name
+      const eFundTransferDebitLedgerSelect = new Select({
+        name: "filename",
+        message: "Select ledger name for e fund transfer :",
+        choices: [
+          "HDFC - Cur A/c  03567620000018",
+          "Axis Bank 924020058901303",
+        ],
+      });
+
+      /** @type {EFundTransferLedgerName} */
+      const eFundTransferDebitLedgerName =
+        await eFundTransferDebitLedgerSelect.run();
+
       spinner.start(chalk.cyan("Reading receipt data..."));
 
       const receiptDataArray = excelToArray(filePath).filter(
@@ -103,7 +118,10 @@ async function main() {
 
       spinner.text = chalk.cyan("Processing receipt voucher data...");
       const { tallyAccountingVoucherArray, ledgerArray } =
-        getAccountingVoucherReceiptData(receiptDataArray);
+        getAccountingVoucherReceiptData(
+          receiptDataArray,
+          eFundTransferDebitLedgerName
+        );
 
       spinner.text = chalk.cyan("Creating output files...");
       createXls(
