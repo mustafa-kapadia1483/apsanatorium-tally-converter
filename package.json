@@ -1,27 +1,21 @@
 {
-  "name": "apsanatorium-receipt-tally-converter",
-  "version": "2.0.0",
-  "description": "Convert data to tally compatible format for receipt entry",
-  "main": "index.js",
+  "name": "apsanatorium-tally-converter-extension",
+  "private": true,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node ."
+    "compile": "tsc --noEmit",
+    "dev": "vite",
+    "build": "vite build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mustafa-kapadia1483/apsanatorium-receipt-tally-converter.git"
+  "devDependencies": {
+    "@types/webextension-polyfill": "^0.10.0",
+    "typescript": "~5.6.3",
+    "vite": "^5.0.0",
+    "vite-plugin-web-extension": "^4.0.0",
+    "webextension-polyfill": "^0.10.0"
   },
-  "author": "Mustafa Kapadia",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mustafa-kapadia1483/apsanatorium-receipt-tally-converter/issues"
-  },
-  "homepage": "https://github.com/mustafa-kapadia1483/apsanatorium-receipt-tally-converter#readme",
   "dependencies": {
-    "chalk": "^5.4.1",
-    "enquirer": "^2.4.1",
-    "figlet": "^1.8.0",
-    "ora": "^8.1.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   }
 }

@@ -1,14 +1,40 @@
 import { getTallyFormattedDate } from "./date-utils.js";
 
+export interface VoucherEntry {
+  "Invoice ID": string;
+  Name: string;
+  "Booking ID": string;
+  "Invoice Date": string;
+  "Total Room Rent (A)": string;
+  "Taxable Room Rent (C=A-B)": string;
+  "CGST (D)": string;
+  "SGST (E)": string;
+  "Additional Charge (G)": string;
+}
+
+export interface VoucherObject {
+  "Voucher Date": string;
+  "Voucher Type Name": string;
+  "Voucher Number": string;
+  "Ledger Name": string;
+  "Ledger Amount": number;
+  "Ledger Amount Dr/Cr": "Dr" | "Cr";
+}
+
 /**
- * Function to calculate numbers such that it's rounded to 2 numbers and adition is always equal to total
- * @param {number} total
- * @param {number} num1
- * @param {number} num2
- * @param {number} num3
- * @returns {Array}
+ * Calculates numbers such that they're rounded to 2 decimal places and their sum equals the total
+ * @param total - The target total sum
+ * @param num1 - First number to adjust
+ * @param num2 - Second number to adjust
+ * @param num3 - Third number to adjust
+ * @returns An array of three numbers that sum to the total
  */
-function calculateNumbers(total, num1, num2, num3) {
+function calculateNumbers(
+  total: number,
+  num1: number,
+  num2: number,
+  num3: number
+): [number, number, number] {
   // Round the numbers to 2 decimal places
   num1 = parseFloat(num1.toFixed(2));
   num2 = parseFloat(num2.toFixed(2));
@@ -27,15 +53,15 @@ function calculateNumbers(total, num1, num2, num3) {
   return [num1, num2, num3];
 }
 
-// console.log(calculateNumbers(30)); // [26.79, 1.61, 1.60]
-
 /**
- *
- * @param {Array} salesDataArray - Array containing sales raw data json
- * @returns {Array}
+ * Processes sales data array and converts it into accounting voucher format
+ * @param salesDataArray - Array containing sales raw data entries
+ * @returns Array of voucher objects with accounting data
  */
-export default function getAccoutingVoucherSalesData(salesDataArray) {
-  const accoutingVoucherSalesArray = [];
+export function getAccoutingVoucherSalesData(
+  salesDataArray: VoucherEntry[]
+): VoucherObject[] {
+  const accoutingVoucherSalesArray: VoucherObject[] = [];
   for (let entry of salesDataArray) {
     const VOUCHER_TYPE_NAME = "Sales";
 
@@ -51,7 +77,7 @@ export default function getAccoutingVoucherSalesData(salesDataArray) {
 
     const voucherDate = getTallyFormattedDate(new Date(invoiceDate));
 
-    const debitObject = {
+    const debitObject: VoucherObject = {
       "Voucher Date": voucherDate,
       "Voucher Type Name": VOUCHER_TYPE_NAME,
       "Voucher Number": voucherNumber,
@@ -61,19 +87,19 @@ export default function getAccoutingVoucherSalesData(salesDataArray) {
       "Ledger Amount Dr/Cr": "Dr",
     };
 
-    const occupanyRoomRentIncome = {
+    const occupanyRoomRentIncome: VoucherObject = {
       ...debitObject,
       "Ledger Name": "01. Occupancy Room Rent Income",
       "Ledger Amount": totalRoomRent,
       "Ledger Amount Dr/Cr": "Cr",
     };
 
-    const occupanyRoomRentIncomeSalesCGST = {
+    const occupanyRoomRentIncomeSalesCGST: VoucherObject = {
       ...occupanyRoomRentIncome,
       "Ledger Name": "Sales - CGST",
       "Ledger Amount": cgstRoomRent,
     };
-    const occupanyRoomRentIncomeSalesSGST = {
+    const occupanyRoomRentIncomeSalesSGST: VoucherObject = {
       ...occupanyRoomRentIncome,
       "Ledger Name": "Sales - SGST",
       "Ledger Amount": sgstRoomRent,
@@ -98,18 +124,18 @@ export default function getAccoutingVoucherSalesData(salesDataArray) {
         additionalRoomServiceIncomeGst
       );
 
-      const additionalRoomServiceIncome = {
+      const additionalRoomServiceIncome: VoucherObject = {
         ...occupanyRoomRentIncome,
         "Ledger Name": "02. Additional Room Service Income",
         "Ledger Amount": charges[0],
       };
 
-      const additionalRoomServiceIncomeCGST = {
+      const additionalRoomServiceIncomeCGST: VoucherObject = {
         ...occupanyRoomRentIncomeSalesCGST,
         "Ledger Amount": charges[1],
       };
 
-      const additionalRoomServiceIncomeSGST = {
+      const additionalRoomServiceIncomeSGST: VoucherObject = {
         ...occupanyRoomRentIncomeSalesSGST,
         "Ledger Amount": charges[2],
       };

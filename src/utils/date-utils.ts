@@ -1,10 +1,13 @@
 /**
+ * Formats a date according to the specified format string
+ *
  * Port of strftime() by T. H. Doan (https://thdoan.github.io/strftime/)
- * @param {string} sFormat - Format in which date string needs to be returned in
- * @param {Date|null} date - Date object for which formatted string will be returned
- * @returns {string}
+ *
+ * @param sFormat The format string specifying how the date should be formatted
+ * @param date Optional Date object to format. If not provided, current date is used
+ * @returns A formatted date string according to the specified format
  */
-export function strftime(sFormat, date = null) {
+export function strftime(sFormat: string, date: Date | null = null): string {
   if (typeof sFormat !== "string") {
     return "";
   }
@@ -115,9 +118,9 @@ export function strftime(sFormat, date = null) {
 
 /**
  * Returns date in string formatted for tally
- * @param {Date} dateObject - JS Date object
- * @returns {string}
+ * @param dateObject - JS Date object
+ * @returns A date string in the format "dd-MMM-yyyy"
  */
-export function getTallyFormattedDate(dateObject = null) {
+export function getTallyFormattedDate(dateObject: Date | null = null): string {
   return strftime("%d-%b-%Y", dateObject);
 }

@@ -1,29 +1,61 @@
-/**
- * Accounting vouher data and ledger data
- * @typedef {Object} AccountingData
- * @property {Array} tallyAccountingVoucherArray - Accouting vouchers
- * @property {Array} ledgerArray - Ledgers needer for accouting vouchers
- */
+interface AccountingData {
+  tallyAccountingVoucherArray: TallyVoucher[];
+  ledgerArray: Ledger[];
+}
+
+export interface ReceiptEntry {
+  Date: string;
+  BookingID: string;
+  "Guest Name": string;
+  "Pay Type": string;
+  "Rec No.": string;
+  "Amt-In": number;
+}
+
+interface TallyVoucher {
+  "Voucher Date": string;
+  "Voucher Type Name": string;
+  "Voucher Number": string;
+  "Ledger Name": string;
+  "Ledger Amount": number;
+  "Ledger Amount Dr/Cr": "Dr" | "Cr";
+  "Bank Allocations - Transaction Type": string;
+  "Bank Allocations - Transfer Mode": string;
+  "Bill Type of Ref": string;
+  "Bill Name": string;
+  "Bill Amount": number | string;
+  "Bill Amount - Dr/Cr": string;
+  "Stat Adjustment (GST) - Nature of Adjustment": string;
+}
+
+interface Ledger {
+  Name: string;
+  "Group Name": string;
+  "Mailing Name": string;
+  "GST Registration Type": string;
+  State: string;
+  Country: string;
+}
 
 import { getTallyFormattedDate } from "./date-utils.js";
 
-/**
- * @typedef {"Axis Bank 924020058901303"|"HDFC - Cur A/c  03567620000018"} EFundTransferLedgerName
- */
+export const eFundTransferDebitLedgerNameBankOptions = [
+  "Axis Bank 924020058901303",
+  "HDFC - Cur A/c  03567620000018",
+] as const;
+
+export type EFundTransferLedgerName =
+  (typeof eFundTransferDebitLedgerNameBankOptions)[number];
 
 /**
- * Function to convert raw receipt data to voucher data which can be imported in Tally Primme
- * @param {Array} receiptDataArray
- * @param {EFundTransferLedgerName} eFundTransferDebitLedgerName
- * @returns {AccountingData}
- *
+ * Converts raw receipt data to voucher data which can be imported in Tally Prime
  */
-export default function getAccountingVoucherReceiptData(
-  receiptDataArray,
-  eFundTransferDebitLedgerName
-) {
-  let tallyAccountingVoucherArray = [];
-  let ledgerArray = [];
+export function getAccountingVoucherReceiptData(
+  receiptDataArray: ReceiptEntry[],
+  eFundTransferDebitLedgerName: EFundTransferLedgerName
+): AccountingData {
+  let tallyAccountingVoucherArray: TallyVoucher[] = [];
+  let ledgerArray: Ledger[] = [];
   for (let entry of receiptDataArray) {
     const VOUCHER_TYPE_NAME = "Receipt";
     const BILL_TYPE_OF_REF = "New Ref";
@@ -37,9 +69,9 @@ export default function getAccountingVoucherReceiptData(
     let amount = entry["Amt-In"];
 
     let voucherDate = getTallyFormattedDate(new Date(date));
-    let bankAllocationsTransferMode = null;
-    let bankAllocationsTransferType = null;
-    let debitLedgerName = null;
+    let bankAllocationsTransferMode: string | null = null;
+    let bankAllocationsTransferType: string | null = null;
+    let debitLedgerName: string | null = null;
 
     let ledgerName = `${bookingId} ${guestName}`.trim();
 
@@ -62,7 +94,7 @@ export default function getAccountingVoucherReceiptData(
       debitLedgerName = eFundTransferDebitLedgerName; // Qusai: To have this changeable via user input
     }
 
-    let creditObject = {
+    let creditObject: TallyVoucher = {
       "Voucher Date": voucherDate,
       "Voucher Type Name": VOUCHER_TYPE_NAME,
       "Voucher Number": voucherNumber,
@@ -79,15 +111,15 @@ export default function getAccountingVoucherReceiptData(
         STAT_ADJUSTMENT_GST__NATURE_OF_ADJUSTMENT,
     };
 
-    let debitObject = {
+    let debitObject: TallyVoucher = {
       "Voucher Date": voucherDate,
       "Voucher Type Name": VOUCHER_TYPE_NAME,
       "Voucher Number": voucherNumber,
-      "Ledger Name": debitLedgerName,
+      "Ledger Name": debitLedgerName!,
       "Ledger Amount": amount,
       "Ledger Amount Dr/Cr": "Dr",
-      "Bank Allocations - Transaction Type": bankAllocationsTransferType,
-      "Bank Allocations - Transfer Mode": bankAllocationsTransferMode,
+      "Bank Allocations - Transaction Type": bankAllocationsTransferType!,
+      "Bank Allocations - Transfer Mode": bankAllocationsTransferMode!,
       "Bill Type of Ref": "",
       "Bill Name": "",
       "Bill Amount": "",
@@ -98,7 +130,7 @@ export default function getAccountingVoucherReceiptData(
 
     tallyAccountingVoucherArray.push(creditObject, debitObject);
 
-    let ledgerObject = {
+    let ledgerObject: Ledger = {
       Name: ledgerName,
       "Group Name": "Sundry Debtors",
       "Mailing Name": ledgerName,
