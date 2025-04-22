@@ -20,20 +20,29 @@ export default function createXls(
     sheetName
   );
 
-  const workbookBuffer = XLSX.write(tallyImportWorkbook, {
-    bookType: "xlsx",
-    type: "array",
-    compression: true,
-  });
-  const blob = new Blob([workbookBuffer], {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  let url: string | null = null;
+  try {
+    const workbookBuffer = XLSX.write(tallyImportWorkbook, {
+      bookType: "xlsx",
+      type: "array",
+      compression: true,
+    });
+    const blob = new Blob([workbookBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error("Failed to create or download Excel file:", error);
+    throw error;
+  } finally {
+    if (url) {
+      URL.revokeObjectURL(url);
+    }
+  }
 }
