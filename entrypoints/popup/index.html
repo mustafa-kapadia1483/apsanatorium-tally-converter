@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AP Sanatorium Tally Converter</title>
+  <meta name="manifest.type" content="browser_action" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --primary-color: #4F46E5;
+      --primary-hover: #4338CA;
+      --bg-color: #F9FAFB;
+      --card-bg: #FFFFFF;
+      --text-main: #111827;
+      --text-muted: #6B7280;
+      --border-color: #E5E7EB;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 16px;
+      width: 320px;
+      color: var(--text-main);
+      box-sizing: border-box;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--border-color);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+    }
+
+    .icon {
+      background: linear-gradient(135deg, var(--primary-color), #818CF8);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+    }
+
+    h1 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      margin-top: 0;
+    }
+
+    .links-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .link-item a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--text-main);
+      background-color: var(--bg-color);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .link-item a:hover {
+      background-color: #EEF2FF;
+      border-color: #C7D2FE;
+      color: var(--primary-color);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .link-item a svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      transition: transform 0.2s ease;
+    }
+
+    .link-item a:hover svg {
+      transform: translateX(4px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="icon">TC</div>
+      <div>
+        <h1>Tally Converter</h1>
+        <div class="subtitle">AP Sanatorium</div>
+      </div>
+    </div>
+
+    <p class="section-title">Supported Pages</p>
+    <ul class="links-list">
+      <li class="link-item">
+        <a href="https://apsanatorium.com/Report/CollectionReport.aspx" target="_blank">
+          Collection Report
+          <svg viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              fill="none" />
+          </svg>
+        </a>
+      </li>
+      <li class="link-item">
+        <a href="https://apsanatorium.com/Report/GstReport.aspx" target="_blank">
+          GST Report
+          <svg viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              fill="none" />
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </div>
+</body>
+
+</html>
